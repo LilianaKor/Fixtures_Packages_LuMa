@@ -52,28 +52,30 @@ def test_outh_positive(browser, custom_base_url, wait, registration_data):
     browser.find_element('xpath', "//input[@id='firstname']").send_keys("Lady")
     browser.find_element(By.XPATH, "//input[@id='lastname']").send_keys("GAGAha")
     email_field = wait.until(EC.presence_of_element_located((By.ID, "email_address")))
-    #EC.url_to_be()
-    #EC.presence_of_element_located((By.ID, "email_address"))
-    #EC.visibility_of_element_located((By.ID, "email_address"))
+    # EC.url_to_be()
+    # EC.presence_of_element_located((By.ID, "email_address"))
+    # EC.visibility_of_element_located((By.ID, "email_address"))
     email_field.send_keys("lgagaha@gmail.com")
-    #browser.find_element(By.XPATH, "//*[@id='email_address']").send_keys("lgagaha@gmail.com")
+    # browser.find_element(By.XPATH, "//*[@id='email_address']").send_keys("lgagaha@gmail.com")
     browser.find_element(By.XPATH, "//*[@id='password']").send_keys("A123456")
     browser.find_element(By.XPATH, "//*[@id='password-confirmation']").send_keys("A123456")
     browser.find_element(By.XPATH, "//button[@title='Create an Account']").click()
-    #time.sleep(2)
+    # time.sleep(2)
     wait.until(EC.url_changes(f"{custom_base_url}/customer/account/login"))
 
     assert browser.current_url == f"{custom_base_url}/customer/account/create", "URL is not correct"
 
     browser.quit()
 
-# def test_user():
-#     pass
-#
-#
-# class TestDataBases:
-#     def test_db_connection(self):
-#         pass
+
+def test_user():
+    pass
+
+
+class TestDataBases:
+    def test_db_connection(self):
+        pass
+
 
 # def test_positive_registration():
 #     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
@@ -87,5 +89,5 @@ def test_outh_positive(browser, custom_base_url, wait, registration_data):
 #     driver.find_element(By.ID, "password2").send_keys("A123456")
 #     driver.find_element(By.ID, "is_subscribed").click()
 #     driver.find_element(By.ID, "form-validate").click()
-
+#
 #     driver.quit()
