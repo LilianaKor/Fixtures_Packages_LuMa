@@ -6,8 +6,23 @@ from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium import webdriver
+from faker import Faker
 
-MY_BASE_URL = "https://magento.softwaretestingboard.com/"
+
+# fake = Faker()
+
+@pytest.fixture
+def faker_data():
+    fake = Faker()
+    return {
+        "first_name": fake.first_name(),
+        "last_name": fake.last_name(),
+        "email": fake.ascii_free_email(),
+        "password": fake.password(length=8)
+    }
+
+
+# MY_BASE_URL = "https://magento.softwaretestingboard.com/"
 
 
 @pytest.fixture
@@ -25,20 +40,20 @@ def custom_base_url():
     return MY_BASE_URL
 
 
-@pytest.fixture(params=[
-    {"first_name": "Lady",
-     "last_name": "GAGAha",
-     "email": "lgaga1@gmail.com",
-     "password": "A123456"},
-    {"first_name": "La",
-     "last_name": "GAG",
-     "email": "lgaga2@gmail.com",
-     "password": "A123457"},
-    {"first_name": "Ly",
-     "last_name": "GAk",
-     "email": "lgagaha@gmail.com",
-     "password": "A123458"}
-])
+# @pytest.fixture(params=[
+#     {"first_name": "Lady",
+#      "last_name": "GAGAha",
+#      "email": "lgaga1@gmail.com",
+#      "password": "A123456"},
+#     {"first_name": "La",
+#      "last_name": "GAG",
+#      "email": "lgaga2@gmail.com",
+#      "password": "A123457"},
+#     {"first_name": "Ly",
+#      "last_name": "GAk",
+#      "email": "lgagaha@gmail.com",
+#      "password": "A123458"}
+# ])
 def registration_data(request):
     return request.param
 
@@ -48,28 +63,90 @@ def wait(browser):
     return WebDriverWait(browser, 10)
 
 
-@pytest.mark.ui
-@pytest.mark.registration
-@pytest.mark.positive
-@pytest.mark.smoke
-@pytest.mark.regression
-def test_outh_positive(browser, custom_base_url, wait, registration_data):
+# @pytest.mark.ui
+# @pytest.mark.registration
+# @pytest.mark.positive
+# @pytest.mark.smoke
+# @pytest.mark.regression
+# @pytest.mark.parametrize("first_name, last_name, email, password",[
+#     ("Lady", "GAGAha", "lgaga1@gmail.com", "A123456"),
+#     ("La", "GAG", "lgaga2@gmail.com", "A123457"),
+#     ("Lu", "GAk", "lgagaha@gmail.com", "A123458")
+# ])
+# def test_outh_positive(browser, custom_base_url, wait, registration_data):
+#     browser.get(f"{custom_base_url}/customer/account/create")
+#
+#     browser.find_element('xpath', "//input[@id='firstname']").send_keys(registration_data['first_name'])
+#     browser.find_element(By.XPATH, "//input[@id='lastname']").send_keys(registration_data['last_name'])
+#     email_field = wait.until(EC.presence_of_element_located((By.ID, "email_address")))
+#     email_field.send_keys(registration_data['email'])
+#     # browser.find_element(By.XPATH, "//*[@id='email_address']").send_keys("lgagaha@gmail.com")
+#     # browser.find_element(By.XPATH, "//*[@id='password']").send_keys("A123456")
+#     browser.find_element(By.XPATH, "//*[@id='password']").send_keys(registration_data['password'])
+#     browser.find_element(By.XPATH, "//*[@id='password-confirmation']").send_keys(registration_data['password'])
+#     browser.find_element(By.XPATH, "//button[@title='Create an Account']").click()
+#     wait.until(EC.url_changes(f"{custom_base_url}/customer/account/login"))
+#     assert browser.current_url == f"{custom_base_url}/customer/account/create", "URL is not correct"
+
+# @pytest.mark.ui
+# @pytest.mark.registration
+# @pytest.mark.positive
+# @pytest.mark.smoke
+# @pytest.mark.regression
+# @pytest.mark.parametrize("first_name, last_name, email, password",[
+#     ("Lady", "GAGAha", "lgaga1@gmail.com", "A123456"),
+#     ("La", "GAG", "lgaga2@gmail.com", "A123457"),
+#     ("Lu", "GAk", "lgagaha@gmail.com", "A123458")
+# ])
+# def test_outh_positive(browser, custom_base_url, wait, first_name, last_name, email, password):
+#     browser.get(f"{custom_base_url}/customer/account/create")
+#
+#     browser.find_element('xpath', "//input[@id='firstname']").send_keys(first_name)
+#     browser.find_element(By.XPATH, "//input[@id='lastname']").send_keys(last_name)
+#     email_field = wait.until(EC.presence_of_element_located((By.ID, "email_address")))
+#     email_field.send_keys(email)
+#     browser.find_element(By.XPATH, "//*[@id='password']").send_keys(password)
+#     browser.find_element(By.XPATH, "//*[@id='password-confirmation']").send_keys(password)
+#     browser.find_element(By.XPATH, "//button[@title='Create an Account']").click()
+#     wait.until(EC.url_changes(f"{custom_base_url}/customer/account/login"))
+#     assert browser.current_url == f"{custom_base_url}/customer/account/create", "URL is not correct"
+#     time.sleep(4)
+#     browser.quit()
+
+
+# def test_outh_positive(browser, custom_base_url, wait, faker_data):
+#     browser.get(f"{custom_base_url}/customer/account/create")
+#
+#     browser.find_element('xpath', "//input[@id='firstname']").send_keys(faker_data['first_name'])
+#     browser.find_element(By.XPATH, "//input[@id='lastname']").send_keys(faker_data['last_name'])
+#     email_field = wait.until(EC.presence_of_element_located((By.ID, "email_address")))
+#     email_field.send_keys(faker_data['email'])
+#     browser.find_element(By.XPATH, "//*[@id='password']").send_keys(faker_data['password'])
+#     browser.find_element(By.XPATH, "//*[@id='password-confirmation']").send_keys(faker_data['password'])
+#     browser.find_element(By.XPATH, "//button[@title='Create an Account']").click()
+#     wait.until(EC.url_changes(f"{custom_base_url}/customer/account/login"))
+#     assert browser.current_url == f"{custom_base_url}/customer/account/create", "URL is not correct"
+#     time.sleep(4)
+#     browser.quit()
+
+
+MY_BASE_URL = "https://magento.softwaretestingboard.com"
+
+
+def test_outh_positive(browser, custom_base_url, wait, faker_data):
     browser.get(f"{custom_base_url}/customer/account/create")
 
-    browser.find_element('xpath', "//input[@id='firstname']").send_keys(registration_data['first_name'])
-    browser.find_element(By.XPATH, "//input[@id='lastname']").send_keys(registration_data['last_name'])
+    browser.find_element(By.XPATH, "//input[@id='firstname']").send_keys(faker_data['first_name'])
+    browser.find_element(By.XPATH, "//input[@id='lastname']").send_keys(faker_data['last_name'])
     email_field = wait.until(EC.presence_of_element_located((By.ID, "email_address")))
-    email_field.send_keys(registration_data['email'])
-    # browser.find_element(By.XPATH, "//*[@id='email_address']").send_keys("lgagaha@gmail.com")
-    # browser.find_element(By.XPATH, "//*[@id='password']").send_keys("A123456")
-    browser.find_element(By.XPATH, "//*[@id='password']").send_keys(registration_data['password'])
-    browser.find_element(By.XPATH, "//*[@id='password-confirmation']").send_keys(registration_data['password'])
+    email_field.send_keys(faker_data['email'])
+    browser.find_element(By.XPATH, "//*[@id='password']").send_keys(faker_data['password'])
+    browser.find_element(By.XPATH, "//*[@id='password-confirmation']").send_keys(faker_data['password'])
     browser.find_element(By.XPATH, "//button[@title='Create an Account']").click()
-    wait.until(EC.url_changes(f"{custom_base_url}/customer/account/login"))
-    time.sleep(3)
-    assert browser.current_url == f"{custom_base_url}/customer/account/create", "URL is not correct"
-    time.sleep(4)
-    browser.quit()
+
+    wait.until(EC.url_contains("/customer/account/"))  # More flexible wait condition
+
+    assert browser.current_url == f"{custom_base_url}/customer/account/", "URL is not correct"
 
 # def test_user():
 #     pass
