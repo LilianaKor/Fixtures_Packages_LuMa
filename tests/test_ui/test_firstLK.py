@@ -1,3 +1,4 @@
+import time
 import pytest
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.ui import WebDriverWait
@@ -24,14 +25,22 @@ def custom_base_url():
     return MY_BASE_URL
 
 
-@pytest.fixture
-def registration_data():
-    return {
-        "first_name": "Lady",
-        "last_name": "GAGAha",
-        "email": "lgagaha@gmail.com",
-        "password": "A123456"
-    }
+@pytest.fixture(params=[
+    {"first_name": "Lady",
+     "last_name": "GAGAha",
+     "email": "lgaga1@gmail.com",
+     "password": "A123456"},
+    {"first_name": "La",
+     "last_name": "GAG",
+     "email": "lgaga2@gmail.com",
+     "password": "A123457"},
+    {"first_name": "Ly",
+     "last_name": "GAk",
+     "email": "lgagaha@gmail.com",
+     "password": "A123458"}
+])
+def registration_data(request):
+    return request.param
 
 
 @pytest.fixture
@@ -39,33 +48,32 @@ def wait(browser):
     return WebDriverWait(browser, 10)
 
 
+@pytest.mark.ui
+@pytest.mark.registration
+@pytest.mark.positive
+@pytest.mark.smoke
+@pytest.mark.regression
 def test_outh_positive(browser, custom_base_url, wait, registration_data):
-
     browser.get(f"{custom_base_url}/customer/account/create")
 
-    browser.find_element('xpath', "//input[@id='firstname']").send_keys("registration_data", 'first_name')
-    browser.find_element(By.XPATH, "//input[@id='lastname']").send_keys('registration_data', 'last_name')
+    browser.find_element('xpath', "//input[@id='firstname']").send_keys(registration_data['first_name'])
+    browser.find_element(By.XPATH, "//input[@id='lastname']").send_keys(registration_data['last_name'])
     email_field = wait.until(EC.presence_of_element_located((By.ID, "email_address")))
-    email_field.send_keys('registration_data', 'email')
+    email_field.send_keys(registration_data['email'])
     # browser.find_element(By.XPATH, "//*[@id='email_address']").send_keys("lgagaha@gmail.com")
     # browser.find_element(By.XPATH, "//*[@id='password']").send_keys("A123456")
-    browser.find_element(By.XPATH, "//*[@id='password']").send_keys('registration_data','password')
-    browser.find_element(By.XPATH, "//*[@id='password-confirmation']").send_keys("A123456")
+    browser.find_element(By.XPATH, "//*[@id='password']").send_keys(registration_data['password'])
+    browser.find_element(By.XPATH, "//*[@id='password-confirmation']").send_keys(registration_data['password'])
     browser.find_element(By.XPATH, "//button[@title='Create an Account']").click()
     wait.until(EC.url_changes(f"{custom_base_url}/customer/account/login"))
-
+    time.sleep(3)
     assert browser.current_url == f"{custom_base_url}/customer/account/create", "URL is not correct"
-
+    time.sleep(4)
     browser.quit()
 
+# def test_user():
+#     pass
 
-def test_user():
-    pass
-
-
-class TestDataBases:
-    def test_db_connection(self):
-        pass
-
-
-
+# class TestDataBases:
+#     def test_db_connection(self):
+#         pass
