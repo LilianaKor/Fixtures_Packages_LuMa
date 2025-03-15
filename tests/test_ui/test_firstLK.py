@@ -106,6 +106,7 @@ def test_outh_positive(browser, custom_base_url, wait, first_name, last_name, em
     browser.find_element(By.XPATH, "//*[@id='password']").send_keys(password)
     browser.find_element(By.XPATH, "//*[@id='password-confirmation']").send_keys(password)
     browser.find_element(By.XPATH, "//button[@title='Create an Account']").click()
+    browser.save_screenshot("screenshot.png")
     wait.until(EC.url_changes(f"{custom_base_url}/customer/account/login"))
     assert browser.current_url == f"{custom_base_url}/customer/account/create", "URL is not correct"
     time.sleep(4)
